@@ -31,4 +31,4 @@ const employeeSchema = new mongoose.Schema(
     { timestamps: true }
 )
 
-export const User = mongoose.model("Employee", employeeSchema)
+export const Employee = mongoose.model("Employee", employeeSchema)

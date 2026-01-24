@@ -2,18 +2,13 @@ import { Employee } from "../models/employee.model.js"
 
 const createEmployee = async (req, res) => {
     try {
-        const user = req.user
-        if (!user) {
-            return res.status(404).json({ message: "User not found" })
-        }
-
-        const { phoneNumber, department, designation, salary } = req.body
-        if (!phoneNumber || !department || !designation || !salary) {
+        const { userName, email, phoneNumber, department, designation, salary } = req.body
+        if (!userName || !email || !phoneNumber || !department || !designation || !salary) {
             return res.status(400).json({ message: "All fields are required" })
         }
         const employee = await Employee.create({
-            userName: user.userName,
-            email: user.email,
+            userName,
+            email,
             phoneNumber,
             department,
             designation,
@@ -32,6 +27,15 @@ const fetchEmployees = async (req, res) => {
             return res.status(404).json({ message: "Employees not found" })
         }
         return res.status(200).json({ message: "Employees found", success: true, employees })
+    } catch (error) {
+        return res.status(500).json({ message: "Something went wrong", error })
+    }
+}
+
+const fetchEmployeeById = async (req, res) => {
+    try {
+        const employee = await Employee.findById(req.params.id)
+        return res.status(200).json({ message: "Employee found", employee })
     } catch (error) {
         return res.status(500).json({ message: "Something went wrong", error })
     }
@@ -64,5 +68,6 @@ export {
     createEmployee,
     fetchEmployees,
     updateEmployee,
-    deleteEmployee
+    deleteEmployee,
+    fetchEmployeeById
 }
